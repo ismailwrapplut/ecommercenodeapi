@@ -7,7 +7,7 @@ import {
   getOrderStatsCtrl,
   paymentVerificationCtrl,
 } from "../controllers/orderCtrl.js";
-import { isLoggedIn } from "../middlewares/isLoggedIn.js";
+import isLoggedIn from "../middlewares/isLoggedIn.js";
 
 const orderRouter = exppress.Router();
 

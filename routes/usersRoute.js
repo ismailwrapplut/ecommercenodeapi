@@ -5,7 +5,7 @@ import {
   getUserProfileCtrl,
   updateShippingAddresctrl,
 } from "../controllers/usersCtrl.js";
-import { isLoggedIn } from "../middlewares/isLoggedIn.js";
+import isLoggedIn from "../middlewares/isLoggedIn.js";
 
 const userRoutes = exppress.Router();
 
