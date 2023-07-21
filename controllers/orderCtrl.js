@@ -14,6 +14,9 @@ import crypto from "crypto";
 
 //stripe instance
 const stripe = new Stripe(process.env.STRIPE_KEY);
+console.log(process.env.RAZORPAY_API_KEY_ID);
+console.log(process.env.RAZORPAY_API_KEY_SECRET);
+
 var instance = new Razorpay({
   key_id: process.env.RAZORPAY_API_KEY_ID,
   key_secret: process.env.RAZORPAY_API_KEY_SECRET,
