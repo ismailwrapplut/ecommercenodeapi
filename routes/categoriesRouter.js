@@ -7,7 +7,7 @@ import {
   updateCategoryCtrl,
   deleteCategoryCtrl,
 } from "../controllers/categoriesCtrl.js";
-import isLoggedIn from "../middlewares/isLoggedIn.js";
+import isLoggedIn from "../middlewares/isLoggedin.js";
 
 const categoriesRouter = exppress.Router();
 

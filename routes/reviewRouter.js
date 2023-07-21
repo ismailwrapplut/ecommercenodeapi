@@ -1,6 +1,6 @@
 import exppress from "express";
 import { createReviewCtrl } from "../controllers/reviewsCtrl.js";
-import isLoggedIn from "../middlewares/isLoggedIn.js";
+import isLoggedIn from "../middlewares/isLoggedin.js";
 
 const reviewRouter = exppress.Router();
 
