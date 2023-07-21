@@ -71,30 +71,30 @@ const ProductSchema = new Schema(
     toJSON: { virtuals: true },
   }
 );
-//Virtual
-//Total rating
-ProductSchema.virtual("totalReviews").get(function () {
-  const product = this;
-  return product?.reviews.length;
-});
+//Virtuals
 //qty left
 ProductSchema.virtual("qtyLeft").get(function () {
   const product = this;
   return product.totalQty - product.totalSold;
 });
-//average rating
-ProductSchema.virtual("averageRating").get(() => {
+//Total rating
+ProductSchema.virtual("totalReviews").get(function () {
+  const product = this;
+  return product?.reviews?.length;
+});
+//average Rating
+ProductSchema.virtual("averageRating").get(function () {
   let ratingsTotal = 0;
   const product = this;
-  product?.review?.forEach((review) => {
+  product?.reviews?.forEach((review) => {
     ratingsTotal += review?.rating;
   });
+  //calc average rating
   const averageRating = Number(ratingsTotal / product?.reviews?.length).toFixed(
     1
   );
   return averageRating;
 });
-
 const Product = mongoose.model("Product", ProductSchema);
 
 export default Product;

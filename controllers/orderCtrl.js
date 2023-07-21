@@ -6,30 +6,17 @@ import Order from "../model/Order.js";
 import Product from "../model/Product.js";
 import User from "../model/User.js";
 import Coupon from "../model/Coupon.js";
+import Razorpay from "razorpay";
+import crypto from "crypto";
 //@desc create orders
 //@route POST /api/v1/orders
 //@access private
 
 //stripe instance
 const stripe = new Stripe(process.env.STRIPE_KEY);
-export const productPriceUpdate = asyncHandler(async (req, res) => {
-  const { orderId } = req.params.id;
-  console.log(orderId);
-  const { couponPercentage } = req.body;
-  const orderFound = await Order.findById(orderId);
-  console.log(orderFound);
-
-  const order = await Order.findByIdAndUpdate(orderId, {
-    orderItems: {
-      ...orderFound.orderItems,
-      price:
-        orderFound.orderItems.price -
-        (orderFound.orderItems * couponPercentage) / 100,
-    },
-  });
-  return res.json({
-    order,
-  });
+var instance = new Razorpay({
+  key_id: process.env.RAZORPAY_API_KEY_ID,
+  key_secret: process.env.RAZORPAY_API_KEY_SECRET,
 });
 
 export const createOrderCtrl = asyncHandler(async (req, res) => {
@@ -51,7 +38,6 @@ export const createOrderCtrl = asyncHandler(async (req, res) => {
 
   //Get the payload(customer, orderItems, shipppingAddress, totalPrice);
   const { orderItems, shippingAddress, totalPrice } = req.body;
-  console.log(totalPrice);
   console.log(req.body);
   //Find the user
   const user = await User.findById(req.userAuthId);
@@ -64,13 +50,6 @@ export const createOrderCtrl = asyncHandler(async (req, res) => {
     throw new Error("No Order Items");
   }
   //Place/create order - save into DB
-  const order = await Order.create({
-    user: user?._id,
-    orderItems,
-    shippingAddress,
-    // totalPrice: couponFound ? totalPrice - totalPrice * discount : totalPrice,
-    totalPrice: 768,
-  });
 
   //Update the product qty
   const products = await Product.find({ _id: { $in: orderItems } });
@@ -85,34 +64,32 @@ export const createOrderCtrl = asyncHandler(async (req, res) => {
     await product.save();
   });
   //push order into user
-  user.orders.push(order?._id);
-  await user.save();
 
   //make payment (stripe)
   //convert order items to have same structure that stripe need
-  const convertedOrders = orderItems.map((item) => {
-    return {
-      price_data: {
-        currency: "usd",
-        product_data: {
-          name: item?.name,
-          description: item?.description,
-        },
-        unit_amount: item?.price * 100,
-      },
-      quantity: item?.qty,
-    };
+  var options = {
+    amount: +totalPrice * 100, // amount in the smallest currency unit
+    currency: "INR",
+  };
+  await instance.orders.create(options, async function (err, order) {
+    if (order) {
+      const orderCreate = await Order.create({
+        user: user?._id,
+        orderItems,
+        shippingAddress,
+        // totalPrice: couponFound ? totalPrice - totalPrice * discount : totalPrice,
+        totalPrice,
+        razorpayOrderId: order.id,
+      });
+      user.orders.push(orderCreate?._id);
+      await user.save();
+
+      res.json({
+        order,
+        orderCreate,
+      });
+    }
   });
-  const session = await stripe.checkout.sessions.create({
-    line_items: convertedOrders,
-    metadata: {
-      orderId: JSON.stringify(order?._id),
-    },
-    mode: "payment",
-    success_url: "http://localhost:3000/success",
-    cancel_url: "http://localhost:3000/cancel",
-  });
-  res.send({ url: session.url });
 });
 
 //@desc get all orders
@@ -221,4 +198,34 @@ export const getOrderStatsCtrl = asyncHandler(async (req, res) => {
     orders,
     saleToday,
   });
+});
+
+export const paymentVerificationCtrl = asyncHandler(async (req, res) => {
+  const { razorpay_payment_id, razorpay_order_id, razorpay_signature } =
+    req.body;
+  const body = razorpay_order_id + "|" + razorpay_payment_id;
+  const generated_signature = crypto
+    .createHmac("sha256", process.env.RAZORPAY_API_KEY_SECRET)
+    .update(body.toString())
+    .digest("hex");
+
+  if (generated_signature == razorpay_signature) {
+    const orderFound = await Order.findOneAndUpdate(
+      {
+        razorpayOrderId: razorpay_order_id,
+      },
+      {
+        paymentStatus: "paid",
+        currency: "INR",
+      },
+      {
+        new: true,
+      }
+    );
+
+    console.log(orderFound);
+    res.redirect("http://localhost:3000/success");
+  } else {
+    res.redirect("http://localhost:3000/failed");
+  }
 });

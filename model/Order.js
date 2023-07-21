@@ -16,6 +16,10 @@ const OrderSchema = new Schema(
         required: true,
       },
     ],
+    razorpayOrderId: {
+      type: String,
+      required: true,
+    },
     shippingAddress: {
       type: Object,
       required: true,
@@ -28,10 +32,6 @@ const OrderSchema = new Schema(
     paymentStatus: {
       type: String,
       default: "Not paid",
-    },
-    paymentMethod: {
-      type: String,
-      default: "Not specified",
     },
     totalPrice: {
       type: Number,

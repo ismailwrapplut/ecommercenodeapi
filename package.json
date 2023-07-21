@@ -10,21 +10,25 @@
   },
   "keywords": [
     "API",
-    "NodeJs"
+    "NodeJS"
   ],
-  "author": "Mohd. Ismail",
+  "author": "I-Novotek Academy",
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",
-    "cloudinary": "^1.37.3",
+    "cloudinary": "1.31.0",
     "cors": "^2.8.5",
-    "dotenv": "^16.3.1",
+    "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "express-async-handler": "^1.2.0",
-    "jsonwebtoken": "^9.0.1",
-    "mongoose": "^7.3.2",
+    "jsonwebtoken": "^9.0.0",
+    "mongoose": "^6.8.2",
     "multer": "^1.4.5-lts.1",
     "multer-storage-cloudinary": "^4.0.0",
-    "stripe": "^12.12.0"
+    "razorpay": "^2.9.0",
+    "stripe": "^11.5.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
   }
 }

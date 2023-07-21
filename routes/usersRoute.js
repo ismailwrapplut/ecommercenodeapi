@@ -1,16 +1,16 @@
-import express from "express";
+import exppress from "express";
 import {
-  getUserProfileCtrl,
-  loginUserCtrl,
   registerUserCtrl,
+  loginUserCtrl,
+  getUserProfileCtrl,
   updateShippingAddresctrl,
 } from "../controllers/usersCtrl.js";
-import { isLoggedin } from "../middlewares/isLoggedin.js";
+import { isLoggedIn } from "../middlewares/isLoggedIn.js";
 
-const userRoutes = express.Router();
-userRoutes.put("/update/shipping", isLoggedin, updateShippingAddresctrl);
+const userRoutes = exppress.Router();
+
 userRoutes.post("/register", registerUserCtrl);
 userRoutes.post("/login", loginUserCtrl);
-userRoutes.get("/profile", isLoggedin, getUserProfileCtrl);
-
+userRoutes.get("/profile", isLoggedIn, getUserProfileCtrl);
+userRoutes.put("/update/shipping", isLoggedIn, updateShippingAddresctrl);
 export default userRoutes;

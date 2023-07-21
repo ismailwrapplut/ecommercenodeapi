@@ -1,20 +1,20 @@
-import express from "express";
+import exppress from "express";
 import {
   createCouponCtrl,
-  deleteCouponCtrl,
   getAllCouponsCtrl,
   getCouponCtrl,
   updateCouponCtrl,
+  deleteCouponCtrl,
 } from "../controllers/couponsCtrl.js";
-import { isLoggedin } from "./../middlewares/isLoggedin.js";
-import isAdmin from "./../middlewares/isAdmin.js";
+import isAdmin from "../middlewares/isAdmin.js";
+import { isLoggedIn } from "../middlewares/isLoggedIn.js";
 
-const couponsRouter = express.Router();
+const couponsRouter = exppress.Router();
 
-couponsRouter.post("/", isLoggedin, isAdmin, createCouponCtrl);
+couponsRouter.post("/", isLoggedIn, createCouponCtrl);
+
 couponsRouter.get("/", getAllCouponsCtrl);
-couponsRouter.put("/update/:id", isLoggedin, isAdmin, updateCouponCtrl);
-couponsRouter.delete("/delete/:id", isLoggedin, isAdmin, deleteCouponCtrl);
+couponsRouter.put("/update/:id", isLoggedIn, isAdmin, updateCouponCtrl);
+couponsRouter.delete("/delete/:id", isLoggedIn, isAdmin, deleteCouponCtrl);
 couponsRouter.get("/single", getCouponCtrl);
-
 export default couponsRouter;

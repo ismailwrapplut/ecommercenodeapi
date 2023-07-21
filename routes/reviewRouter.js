@@ -1,8 +1,9 @@
-import express from "express";
+import exppress from "express";
 import { createReviewCtrl } from "../controllers/reviewsCtrl.js";
-import { isLoggedin } from "./../middlewares/isLoggedin.js";
+import { isLoggedIn } from "../middlewares/isLoggedIn.js";
 
-const reviewRouter = express.Router();
+const reviewRouter = exppress.Router();
 
-reviewRouter.post("/:productID", isLoggedin, createReviewCtrl);
+reviewRouter.post("/:productID", isLoggedIn, createReviewCtrl);
+
 export default reviewRouter;

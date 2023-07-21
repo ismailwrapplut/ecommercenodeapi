@@ -2,8 +2,7 @@ import cloudinaryPackage from "cloudinary";
 
 import multer from "multer";
 import { CloudinaryStorage } from "multer-storage-cloudinary";
-import dotenv from "dotenv";
-dotenv.config();
+
 //configure cloudinary
 const cloudinary = cloudinaryPackage.v2;
 cloudinary.config({

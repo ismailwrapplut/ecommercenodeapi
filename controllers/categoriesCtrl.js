@@ -1,9 +1,8 @@
 import asyncHandler from "express-async-handler";
 import Category from "../model/Category.js";
-
-//@desk Create new category
-//@route POST /api/v1/categories
-//@access Privaaattte/Admin
+// @desc    Create new category
+// @route   POST /api/v1/categories
+// @access  Private/Admin
 
 export const createCategoryCtrl = asyncHandler(async (req, res) => {
   const { name } = req.body;
@@ -18,64 +17,69 @@ export const createCategoryCtrl = asyncHandler(async (req, res) => {
     user: req.userAuthId,
     image: req?.file?.path,
   });
+
   res.json({
     status: "success",
-    message: "category created",
+    message: "Category created successfully",
     category,
   });
 });
-//@desk get all category
-//@route GET /api/v1/categories
-//@access Public
+
+// @desc    Get all categories
+// @route   GET /api/categories
+// @access  Public
+
 export const getAllCategoriesCtrl = asyncHandler(async (req, res) => {
   const categories = await Category.find();
-
   res.json({
     status: "success",
-
+    message: "Categories fetched successfully",
     categories,
   });
 });
-//@desk get single category
-//@route GET /api/v1/categories/:id
-//@access Public
 
+// @desc    Get single category
+// @route   GET /api/categories/:id
+// @access  Public
 export const getSingleCategoryCtrl = asyncHandler(async (req, res) => {
   const category = await Category.findById(req.params.id);
-
   res.json({
     status: "success",
-
+    message: "Category fetched successfully",
     category,
   });
 });
-//@desk update category
-//@route PUT /api/v1/categories/:id
-//@access Private/Admin
 
+// @desc    Update category
+// @route   PUT /api/categories/:id
+// @access  Private/Admin
 export const updateCategoryCtrl = asyncHandler(async (req, res) => {
   const { name } = req.body;
+
+  //update
   const category = await Category.findByIdAndUpdate(
     req.params.id,
-    { name },
-    { new: true }
+    {
+      name,
+    },
+    {
+      new: true,
+    }
   );
-
   res.json({
     status: "success",
-
+    message: "category updated successfully",
     category,
   });
 });
 
-//@desk delete category
-//@route DELETE /api/v1/categories/:id
-//@access Private/Admin
-
+// @desc    delete category
+// @route   DELETE /api/categories/:id
+// @access  Private/Admin
 export const deleteCategoryCtrl = asyncHandler(async (req, res) => {
-  const category = await Category.findByIdAndDelete(req.params.id);
-
+  await Category.findByIdAndDelete(req.params.id);
   res.json({
     status: "success",
+    message: "Category deleted successfully",
   });
 });

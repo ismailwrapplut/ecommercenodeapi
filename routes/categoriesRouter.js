@@ -1,27 +1,24 @@
-import express from "express";
+import exppress from "express";
+import catetgoryFileUpload from "../config/categoryUpload.js";
 import {
   createCategoryCtrl,
-  deleteCategoryCtrl,
   getAllCategoriesCtrl,
   getSingleCategoryCtrl,
   updateCategoryCtrl,
+  deleteCategoryCtrl,
 } from "../controllers/categoriesCtrl.js";
-import { isLoggedin } from "../middlewares/isLoggedin.js";
-import catetgoryFileUpload from "../config/categoryFileUpload.js";
-import isAdmin from "./../middlewares/isAdmin.js";
+import { isLoggedIn } from "../middlewares/isLoggedIn.js";
 
-const categoriesRouter = express.Router();
+const categoriesRouter = exppress.Router();
 
 categoriesRouter.post(
   "/",
-  isLoggedin,
-  isAdmin,
+  isLoggedIn,
   catetgoryFileUpload.single("file"),
   createCategoryCtrl
 );
 categoriesRouter.get("/", getAllCategoriesCtrl);
 categoriesRouter.get("/:id", getSingleCategoryCtrl);
-categoriesRouter.put("/:id", isLoggedin, isAdmin, updateCategoryCtrl);
-categoriesRouter.delete("/:id", isLoggedin, isAdmin, deleteCategoryCtrl);
-
+categoriesRouter.delete("/:id", deleteCategoryCtrl);
+categoriesRouter.put("/:id", updateCategoryCtrl);
 export default categoriesRouter;

@@ -5,17 +5,16 @@ import {
   getSingleOrderCtrl,
   updateOrderCtrl,
   getOrderStatsCtrl,
-  productPriceUpdate,
+  paymentVerificationCtrl,
 } from "../controllers/orderCtrl.js";
-import { isLoggedin } from "../middlewares/isLoggedin.js";
+import { isLoggedIn } from "../middlewares/isLoggedIn.js";
 
 const orderRouter = exppress.Router();
 
-orderRouter.post("/", isLoggedin, createOrderCtrl);
-orderRouter.get("/", isLoggedin, getAllordersCtrl);
-orderRouter.get("/sales/stats", isLoggedin, getOrderStatsCtrl);
-orderRouter.put("/update/:id", isLoggedin, updateOrderCtrl);
-orderRouter.get("/:id", isLoggedin, getSingleOrderCtrl);
-orderRouter.post("/update/price/:id", isLoggedin, productPriceUpdate);
-
+orderRouter.post("/", isLoggedIn, createOrderCtrl);
+orderRouter.get("/", isLoggedIn, getAllordersCtrl);
+orderRouter.get("/sales/stats", isLoggedIn, getOrderStatsCtrl);
+orderRouter.put("/update/:id", isLoggedIn, updateOrderCtrl);
+orderRouter.get("/:id", isLoggedIn, getSingleOrderCtrl);
+orderRouter.post("/paymentVerification", paymentVerificationCtrl);
 export default orderRouter;

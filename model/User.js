@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
-const UserSchema = new Schema(
+const UserShema = new Schema(
   {
     fullname: {
       type: String,
@@ -17,13 +17,13 @@ const UserSchema = new Schema(
     },
     orders: [
       {
-        type: Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: "Order",
       },
     ],
     wishLists: [
       {
-        type: Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: "WishList",
       },
     ],
@@ -62,8 +62,12 @@ const UserSchema = new Schema(
       },
     },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+  }
 );
-//compoile the schema to model
-const User = mongoose.model("User", UserSchema);
+
+//compile the schema to model
+const User = mongoose.model("User", UserShema);
+
 export default User;
