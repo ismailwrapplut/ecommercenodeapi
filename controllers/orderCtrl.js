@@ -227,8 +227,8 @@ export const paymentVerificationCtrl = asyncHandler(async (req, res) => {
     );
 
     console.log(orderFound);
-    res.redirect("http://localhost:3000/success");
+    res.redirect("https://sweet-pavlova-583392.netlify.app/success");
   } else {
-    res.redirect("http://localhost:3000/failed");
+    res.redirect("https://sweet-pavlova-583392.netlify.app/failed");
   }
 });
